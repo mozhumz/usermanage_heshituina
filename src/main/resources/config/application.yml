@@ -1,0 +1,19 @@
+# spring
+spring:
+  # profiles
+  profiles:
+    active: dev
+  # swagger
+  swagger:
+    enabled: true
+    base-package: com.mozhumz.usermanage.web.controller
+# log
+logging:
+  config: classpath:config/logback-spring.xml
+  level:
+    root: warn
+    usermanage-heshituina.usermanage: info
+# mybatis plus
+mybatis-plus:
+  type-aliases-package: com.mozhumz.usermanage.model.entity,com.mozhumz.usermanage.model.*
+  mapper-locations: classpath:mappers/*Mapper.xml
