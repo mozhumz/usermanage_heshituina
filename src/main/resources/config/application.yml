@@ -11,7 +11,7 @@ spring:
 logging:
   config: classpath:config/logback-spring.xml
   level:
-    root: warn
+    root: error
     usermanage-heshituina.usermanage: info
 # mybatis plus
 mybatis-plus:
