@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mozhumz.usermanage.mapper.IAppRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mozhumz.usermanage.model.entity.AppRole">
+        <id column="id" property="id" />
+        <result column="appId" property="appId" />
+        <result column="roleId" property="roleId" />
+        <result column="createDate" property="createDate" />
+        <result column="updateDate" property="updateDate" />
+    </resultMap>
+
+</mapper>

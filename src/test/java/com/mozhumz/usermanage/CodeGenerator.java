@@ -23,6 +23,8 @@ import java.util.Properties;
  */
 public class CodeGenerator {
 
+    public static String[]skipTables={"t_role","t_token","t_token_web","t_user","t_user_role"};
+
     /**
      * Project package
      */
@@ -130,7 +132,7 @@ public class CodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true);
-        strategy.setExclude("no");
+        strategy.setExclude(skipTables);
         strategy.setTablePrefix("t_");
 
         mpg.setGlobalConfig(gc);

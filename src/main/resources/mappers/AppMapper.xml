@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mozhumz.usermanage.mapper.IAppMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mozhumz.usermanage.model.entity.App">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="remark" property="remark" />
+        <result column="createDate" property="createDate" />
+        <result column="updateDate" property="updateDate" />
+    </resultMap>
+
+    <select id="findAppList" parameterType="com.mozhumz.usermanage.model.qo.AppQo"
+            resultType="com.mozhumz.usermanage.model.entity.App">
+        select a.* from t_app a
+        left join t_app_role b on a.id=b.appId
+        <trim prefix="where" suffixOverrides="and">
+            <if test="roleId!=null">
+                b.roleId=#{roleId} and
+            </if>
+            <if test="keyword!=null">
+                a.name like #{keyword} and
+            </if>
+        </trim>
+
+    </select>
+</mapper>
