@@ -8,12 +8,13 @@ $.ajax({
              url:url,
              data:JSON.stringify(param),
              success:function(res){
-                 console.log(res);
+                 console.log('ajax-res:'+res);
+                 console.log('JSON.stringify-res:'+JSON.stringify(res));
 //                 window.location.href='http://www.baidu.com';
-                    if(!res.status){
-                        alert(res.message);
-                    }
-                    result= res;
+//                    if(!res.status){
+//                        open(res.message);
+//                    }
+                    result= JSON.stringify(res);
              }
 
          });

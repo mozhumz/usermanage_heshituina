@@ -4,6 +4,7 @@ import com.hyj.util.param.CheckParamsUtil;
 import com.mozhumz.usermanage.model.dto.AddUserDto;
 import com.mozhumz.usermanage.model.dto.ChangePwdDto;
 import com.mozhumz.usermanage.service.IUserService;
+import com.mozhumz.usermanage.utils.SessionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,12 +40,13 @@ public class UserController {
     @Resource
     private IUserService userService;
 
-    @Value("${login.url}")
-    private String loginUrl;
 
-    @Value("${session-redis.timeout}")
-    private Long sessionSeconds;
 
+    @ApiOperation(value = "获取登录用户")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public JsonResponse login() {
+        return JsonResponse.success(SessionUtil.getLoginUser());
+    }
 
 
     @ApiOperation(value = "退出")

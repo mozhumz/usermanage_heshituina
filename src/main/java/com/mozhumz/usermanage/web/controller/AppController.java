@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @Api(value = "测试相关接口", description = "测试相关接口")
-@RequestMapping("/api/test")
+@RequestMapping("/api/app")
 public class AppController {
     @Resource
     private HttpServletRequest request;

@@ -54,6 +54,14 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "1 正常 2禁用")
     private Boolean state;
 
+    @ApiModelProperty(value = "用户姓名")
+    @TableField("realName")
+    private String realName;
+
+    @TableField("phone")
+    @ApiModelProperty(value = "用户手机")
+    private String phone;
+
 
     @Override
     protected Serializable pkVal() {
