@@ -25,6 +25,7 @@ public class ZuulResult {
 
     private Gson gson = getGson();
 
+
     public Gson getGson() {
         GsonBuilder builder = new GsonBuilder();
 
@@ -54,6 +55,7 @@ public class ZuulResult {
                     }.getType());
                 }
             }
+
         } else {
             log.error("远程调用网关接口出错");
             throw new BaseException("远程调用网关接口出错");
