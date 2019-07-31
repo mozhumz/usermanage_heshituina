@@ -10,8 +10,18 @@ import java.util.Date;
  */
 @Data
 public class BaseQo {
-    private int size=20;
-    private int page=1;
+    private Integer size=20;
+    private Integer page=1;
     private Date startDate;
     private Date endDate;
+
+    public void setSize(Integer size) {
+        if(size!=null&&size>0)
+        this.size = size;
+    }
+
+    public void setPage(Integer page) {
+        if(page!=null&&page>0)
+        this.page = page;
+    }
 }

@@ -11,4 +11,22 @@
         <result column="updateDate" property="updateDate"/>
     </resultMap>
 
+    <insert id="addOne" parameterType="com.mozhumz.usermanage.model.entity.UserRole">
+        insert into t_user_role
+        set
+        <if test="id!=null">
+            id=#{id},
+        </if>
+        <if test="createDate!=null">
+            createDate=#{createDate},
+        </if>
+        <if test="updateDate!=null">
+            updateDate=#{updateDate},
+        </if>
+        <if test="userId!=null">
+            userId=#{userId},
+        </if>
+        roleId=#{roleId}
+    </insert>
+
 </mapper>

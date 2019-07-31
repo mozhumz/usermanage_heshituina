@@ -1,24 +1,23 @@
 package com.mozhumz.usermanage.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.*;
-import com.hyj.util.common.CommonUtil;
+import com.google.gson.reflect.TypeToken;
+import com.hyj.util.exception.BaseException;
+import com.hyj.util.param.CheckParamsUtil;
+import com.hyj.util.web.GsonUtil;
 import com.mozhumz.usermanage.constant.CommonConstant;
+import com.mozhumz.usermanage.enums.ErrorCode;
 import com.mozhumz.usermanage.model.dto.SessionUser;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.lshaci.framework.web.exception.LoginException;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author huyuanjia
@@ -27,24 +26,13 @@ import java.util.Map;
 @Component
 @Slf4j
 public class SessionUtil {
-    public static RedisTemplate<String,String> redisTemplate;
-    public static Gson gson = getGson();
+    public static RedisTemplate redisTemplate;
+    public static Gson gson = GsonUtil.gson;
 
 
-    public static Gson getGson() {
-        GsonBuilder builder = new GsonBuilder();
-
-        // Register an adapter to manage the date types as long values
-        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
-        return builder.create();
-    }
 
     @Resource
-    public void setRedisTemplate(RedisTemplate<String,String> redisTemplate){
+    public void setRedisTemplate(RedisTemplate redisTemplate){
         SessionUtil.redisTemplate=redisTemplate;
     }
 
@@ -64,12 +52,50 @@ public class SessionUtil {
      */
     public static SessionUser getLoginUser(){
         String token= (String) getSession().getAttribute(CommonConstant.token);
-        if(token==null){
-            throw new LoginException();
+        if(!CheckParamsUtil.check(token)){
+            throw new BaseException(ErrorCode.LOGIN_EXP_ERR.desc,ErrorCode.LOGIN_EXP_ERR.code);
         }
         String json= (String) redisTemplate.opsForValue().get(CommonConstant.globalSessionUser+token);
-        SessionUser userDto= JSON.parseObject(json,SessionUser.class);
-        return userDto;
+        if(!CheckParamsUtil.check(json)){
+            throw new BaseException(ErrorCode.LOGIN_EXP_ERR.desc,ErrorCode.LOGIN_EXP_ERR.code);
+        }
+        return gson.fromJson(json,new TypeToken<SessionUser>(){}.getType());
     }
+
+    public static void setSessionUser(Long sessionSeconds,SessionUser userDto){
+        Duration duration = Duration.ofSeconds(sessionSeconds);
+        redisTemplate.opsForValue().set(CommonConstant.globalSessionUser +userDto.getToken(),
+                gson.toJson(userDto),duration);
+    }
+
+    /**
+     * 设置redis KV
+     * @param k
+     * @param v
+     * @param seconds 失效秒值
+     */
+    public static void setRedisKV(String k,String v,long seconds){
+        Duration duration = Duration.ofSeconds(seconds);
+        redisTemplate.opsForValue().set(k,v,duration);
+    }
+
+    /**
+     * 根据key获取redis V
+     * @param k
+     * @return
+     */
+    public static String getRedisV(String k){
+        return (String) redisTemplate.opsForValue().get(k);
+    }
+
+    /**
+     * 获取用户验证码
+     * @return
+     */
+    public static String getUserCode(String username){
+        return getRedisV(CommonConstant.userCode+ username);
+    }
+
+
 
 }

@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Transient;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ public class App extends Model<App> {
 
     private String url;
 
+
     private String remark;
 
     @TableField("createDate")
@@ -46,6 +48,8 @@ public class App extends Model<App> {
     @TableField("updateDate")
     private Date updateDate;
 
+    @TableField(exist=false)
+    private boolean status=false;
 
     @Override
     protected Serializable pkVal() {

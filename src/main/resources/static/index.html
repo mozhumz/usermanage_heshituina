@@ -9,196 +9,438 @@
     <script src="static/js/common/md5.js"></script>
     <script src="static/js/common/api.js"></script>
     <script src="static/js/common/element-ui.js"></script>
+    <script src="static/js/common/user.js"></script>
     <script src="static/js/common/util.js"></script>
-    <script src="static/js/index.js"></script>
+    <script src="static/js/main.js"></script>
 </head>
 <style>
     .el-row {
-    width:80%;
+    width:85%;
     margin-bottom: 20px;
     &:last-child {
       margin-bottom: 0;
     }
   }
 
+  .border-left{
+    margin-left:6%;
+  }
+
+
 
 </style>
 <body>
 
 <div id="main">
-    <el-row :gutter="20">
+    <el-row :gutter="24">
         <!--<el-col :span="12"><div class="grid-content bg-purple" ></div></el-col>-->
         <!--<el-col :span="16"><div class="grid-content bg-purple"></div></el-col>-->
         <el-col :span="24">
             <div class="grid-content bg-purple" style="text-align:right">
-                <i class="el-icon-user-solid">欢迎您，xxx</i>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-
-                <el-button type="primary" icon="el-icon-circle-close">退出</el-button>
+                <i class="el-icon-user-solid" id="welcomeUser"></i>
+                <el-button type="primary" @click="logOut" icon="el-icon-circle-close">退出</el-button>
             </div>
         </el-col>
     </el-row>
-    <el-row class="tac">
-        <el-col :span="3">
-            <!--<h5 style="text-align:center">导航栏</h5>-->
-            <el-menu
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose"
-            >
-                <el-menu-item index="1" class="is-active" @click="getAppList(null)">
-                    <!--<i class="el-icon-menu"></i>-->
-                    <span slot="title">应用中心</span>
+    <!--<h5 style="text-align:center">导航栏</h5>-->
+    <el-row class="border-left">
+        <el-col :span="4"></el-col>
+        <el-menu
+                class="el-menu-demo" mode="horizontal"
+                @open="handleOpen"
+                @close="handleClose"
+                default-active="1"
+        >
+            <el-menu-item index="1" @click="changeMenu(1)">
+                <!--<i class="el-icon-menu"></i>-->
+                <span slot="title">应用中心</span>
+            </el-menu-item>
+
+            <el-menu-item v-if="isAdmin" index="2" @click="changeMenu(2)">
+                <!--<i class="el-icon-menu"></i>-->
+                <span slot="title">用户列表</span>
+            </el-menu-item>
+            <el-submenu index="3" v-if="isAdmin">
+                <template slot="title">系统设置</template>
+                <el-menu-item index="3-1" @click="changeMenu(3,1)">
+                    系统邮箱
                 </el-menu-item>
-
-                <el-menu-item index="2" @click="appcenter_f=false;userList_f=true">
-                    <!--<i class="el-icon-menu"></i>-->
-                    <span slot="title">用户列表</span>
+                <el-menu-item index="3-2" @click="changeMenu(3,2)">
+                    添加邮箱
                 </el-menu-item>
-                <!--<el-submenu index="1">-->
-                    <!--<template slot="title">-->
-                        <!--<i class="el-icon-location"></i>-->
-                        <!--<span>应用中心</span>-->
-                    <!--</template>-->
-                    <!--<el-menu-item index="1-1">选项1</el-menu-item>-->
-                    <!--<el-menu-item index="1-2">选项2</el-menu-item>-->
-                    <!--<el-menu-item-group title="分组2">-->
-                    <!--<el-menu-item index="1-3">选项3</el-menu-item>-->
-                    <!--</el-menu-item-group>-->
-                    <!--<el-submenu index="1-4">-->
-                    <!--<template slot="title">选项4</template>-->
-                    <!--<el-menu-item index="1-4-1">选项1</el-menu-item>-->
-                    <!--</el-submenu>-->
-                <!--</el-submenu>-->
-
-
-                <!--<el-menu-item index="3" disabled>-->
-                <!--<i class="el-icon-document"></i>-->
-                <!--<span slot="title">导航三</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="4">-->
-                <!--<i class="el-icon-setting"></i>-->
-                <!--<span slot="title">导航四</span>-->
-                <!--</el-menu-item>-->
-            </el-menu>
-
-
-        </el-col>
-
-        <el-col :span="21" v-if="appcenter_f">
-            <span>
-
-
-                <el-input style="width:30%" placeholder="输入应用名称搜索"></el-input>
-            <el-button type="primary">确定</el-button>
-            </span>
-            <template>
-
-
-                <el-table
-                        :data="tableData"
-                        >
-
-
-                    <el-table-column
-                            prop="name"
-                            label="应用名称"
-                            width="180">
-                        <template slot-scope="scope">
-                            <el-input v-if="scope.row.status" v-model="scope.row.name"></el-input>
-                            <span v-else>{{scope.row.name}}</span>
-                        </template>
-
-                    </el-table-column>
-                    <el-table-column
-                            prop="url"
-                            label="访问地址"
-                    >
-                        <template slot-scope="scope">
-                            <el-input v-if="scope.row.status" v-model="scope.row.url"></el-input>
-                            <span v-else>{{scope.row.url}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            prop="remark"
-                            label="备注">
-                    </el-table-column>
-                    <el-table-column
-                            align="right" >
-
-                        <template slot-scope="scope" >
-                            <el-button v-if="appcenter_f"
-                                    size="mini"
-                                    @click="handleEdit(scope.$index, scope.row)"
-                            >编辑
-                            </el-button>
-                            <el-button
-                                    v-if="appcenter_f"
-                                    size="mini"
-                                    type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">保存
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </template>
-        </el-col>
-
-        <el-col :span="18" v-if="userList_f">
-            <template>
-                <el-table
-                        :data="tableData"
-                        style="width: 100%"
-                >
-                    <el-table-column
-                            prop="realName"
-                            label="姓名"
-                            >
-                    </el-table-column>
-                    <el-table-column
-                            prop="username"
-                            label="账号"
-                            >
-                    </el-table-column>
-                    <el-table-column
-                            prop="roleNameStr"
-                            label="拥有角色"
-                            >
-                    </el-table-column>
-                    <el-table-column
-                            prop="phone"
-                            label="手机">
-                    </el-table-column>
-                    <el-table-column
-                            prop="createDate"
-                            label="创建时间">
-                    </el-table-column>
-
-                    <el-table-column
-                            align="right" >
-
-                        <template slot-scope="scope">
-                            <el-button
-                                    v-if="userList_f"
-                                    size="mini"
-                                    @click="handleEdit(scope.$index, scope.row)"
-                            >编辑
-                            </el-button>
-                            <el-button
-                                    v-if="userList_f"
-                                    size="mini"
-                                    type="primary"
-                                    @click="handleDelete(scope.$index, scope.row)">保存
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </template>
-        </el-col>
-
+            </el-submenu>
+            <el-submenu index="4" @click="changeMenu(4)">
+                <!--<i class="el-icon-menu"></i>-->
+                <template slot="title">个人中心</template>
+                <el-menu-item index="4-1" @click="changeMenu(4,1)">
+                    修改信息
+                </el-menu-item>
+                <el-menu-item index="4-2" @click="changeMenu(4,2)">
+                    修改密码
+                </el-menu-item>
+            </el-submenu>
+        </el-menu>
     </el-row>
 
 
+    <!--    应用中心-->
+    <div v-show="appcenter_f" class="border-left">
+        <el-row class="tac">
+            <el-col :span="18">
+            <span>
+                <el-input v-model="keyword" style="width:30%" placeholder="输入应用名称搜索"></el-input>
+                <el-button id="appBtn" type="primary" @click="getAppList()">确定</el-button>
+            </span>
+                <template>
+
+
+                    <el-table
+                            :data="tableData"
+                    >
+
+
+                        <el-table-column
+                                prop="name"
+                                label="应用名称"
+                                width="180">
+                            <template slot-scope="scope">
+                                <el-input v-if="scope.row.status" v-model="scope.row.name"></el-input>
+                                <span v-else>{{scope.row.name}}</span>
+                            </template>
+
+                        </el-table-column>
+                        <el-table-column
+                                label="访问地址"
+                                width="500"
+                        >
+                            <template slot-scope="scope">
+                                <el-input v-if="scope.row.status" v-model="scope.row.url"></el-input>
+                                <span v-else> <a :href="scope.row.url" target="_blank" class="buttonText">{{scope.row.url}}</a></span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                prop="remark"
+                                label="备注">
+                            <template slot-scope="scope">
+                                <el-input v-if="scope.row.status" v-model="scope.row.remark"></el-input>
+                                <span v-else>{{scope.row.remark}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                v-if="isAdmin"
+                                fixed="right"
+                                label="操作"
+                                width="100">
+
+                            <template slot-scope="scope">
+                                <el-button type="text" v-if="appcenter_f"
+                                           size="mini"
+                                           @click="handleEdit(scope.$index, scope.row)"
+                                >编辑
+                                </el-button>
+                                <el-button
+                                        type="text"
+                                        v-if="appcenter_f"
+                                        size="mini"
+                                        @click="handleSave(scope.$index, scope.row)"
+                                        :disabled="lazyBtn_f">保存
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-col>
+        </el-row>
+    </div>
+
+    <!--    用户列表-->
+    <div v-show="userList_f" class="border-left">
+        <el-row class="tac">
+            <el-col :span="18">
+            <span>
+                <el-input v-model="keyword" style="width:30%" placeholder="输入关键字搜索(姓名 账号 手机)"></el-input>
+                <el-button id="userBtn" type="primary" @click="getUserList()">确定</el-button>
+                <el-button type="primary" @click="openAddUser()" style="margin-left:10%">添加用户</el-button>
+            </span>
+                <template>
+                    <el-table
+                            :data="userList"
+                            style="width: 100%"
+
+                    >
+                        <el-table-column
+                                prop="realName"
+                                label="姓名"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="username"
+                                label="账号"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="roleNameStr"
+                                label="拥有角色"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="phone"
+                                label="手机">
+                        </el-table-column>
+                        <el-table-column
+                                prop="state_info"
+                                label="账号状态">
+                        </el-table-column>
+                        <el-table-column
+                                prop="is0pwd"
+                                label="登录密码是否为初始">
+                        </el-table-column>
+                        <el-table-column
+                                prop="is0bpwd"
+                                label="操作密码是否为初始">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createDate"
+                                label="创建时间">
+                        </el-table-column>
+                        <el-table-column
+                                fixed="right"
+                                label="操作"
+                                width="100">
+
+                            <template slot-scope="scope">
+                                <el-button type="text" v-if="userList_f"
+                                           size="mini"
+                                           @click="openUserHtml(scope.row)"
+                                >编辑
+                                </el-button>
+                                <el-button type="text" v-if="scope.row.state_f"
+                                           size="mini"
+                                           @click="openMsgBox(1,scope.row)"
+                                >冻结
+                                </el-button>
+                                <el-button type="text" v-else
+                                           size="mini"
+                                           @click="openMsgBox(2,scope.row)"
+                                >解冻
+                                </el-button>
+
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="userPage"
+                    :page-size="10"
+                    layout=" total, sizes, prev, pager, next, jumper "
+                    :total="userTotal">
+            </el-pagination>
+            <!--            <el-pagination-->
+            <!--                    @size-change="handleSizeChange"-->
+            <!--                    @current-change="handleCurrentChange"-->
+            <!--                    :current-page="userPage"-->
+            <!--                    :page-sizes="[100, 200, 300, 400]"-->
+            <!--                    :page-size="100"-->
+            <!--                    layout="total, sizes, prev, pager, next, jumper"-->
+            <!--                    :total="400">-->
+            <!--            </el-pagination>-->
+        </el-row>
+    </div>
+
+    <!--    系统设置-->
+    <div v-show="sys_f" >
+        <!--        邮箱列表-->
+        <div v-show="sys_email_f" class="border-left">
+            <el-row class="tac">
+                <el-col :span="18">
+            <span>
+                <el-input v-model="emailQo.keyword" style="width:30%" placeholder="输入邮箱搜索"></el-input>
+                <el-button id="emailBtn" type="primary" @click="getEmails()">确定</el-button>
+            </span>
+                    <template>
+                        <el-table
+                                :data="emailList"
+                                style="width: 100%"
+
+                        >
+                            <el-table-column
+                                    prop="email"
+                                    label="邮箱帐号"
+                            >
+                                <template slot-scope="scope">
+                                    <el-input v-if="scope.row.status" v-model="scope.row.email"></el-input>
+                                    <span v-else>{{scope.row.email}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="pwd"
+                                    label="授权码"
+                            >
+                                <template slot-scope="scope">
+                                    <el-input v-if="scope.row.status" v-model="scope.row.pwd"></el-input>
+                                    <span v-else>{{scope.row.pwd}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="remark"
+                                    label="备注"
+                            >
+                                <template slot-scope="scope">
+                                    <el-input v-if="scope.row.status" v-model="scope.row.remark"></el-input>
+                                    <span v-else>{{scope.row.remark}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="createDate"
+                                    label="创建时间">
+                            </el-table-column>
+                            <el-table-column
+                                    label="是否正常">
+                                <template slot-scope="scope">
+                                    <el-switch active-color="#13ce66"
+                                               inactive-color="#ff4949"
+                                               v-if="scope.row.status" v-model="scope.row.state_f">
+
+                                    </el-switch>
+                                    <span v-else>
+                                        <el-switch active-color="#13ce66"
+                                                   inactive-color="#ff4949"
+                                                   v-model="scope.row.state_f" disabled>
+
+                                        </el-switch>
+                                    </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    fixed="right"
+                                    label="操作"
+                                    width="100">
+
+                                <template slot-scope="scope">
+                                    <el-button type="text" v-if="sys_email_f"
+                                               size="mini"
+                                               @click="handleEdit(scope.$index, scope.row)"
+                                    >编辑
+                                    </el-button>
+                                    <el-button type="text" v-if="sys_email_f"
+                                               size="mini"
+                                               @click="updateEmail(scope.$index,scope.row)"
+                                    >保存
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-pagination
+                        @current-change="emailPageChange"
+                        :current-page="emailQo.page"
+                        :page-size="10"
+                        layout=" total, sizes, prev, pager, next, jumper "
+                        :total="emailTotal">
+                </el-pagination>
+            </el-row>
+        </div>
+        <!--        添加邮箱-->
+        <div v-show="sys_emailAdd_f" class="border-left" style="width:30%">
+            <el-form :model="emailDto" :rules="emailRules" ref="emailForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="邮箱账号" prop="email">
+                    <el-input v-model="emailDto.email"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱授权码" prop="pwd">
+                    <el-input v-model="emailDto.pwd"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱备注">
+                    <el-input v-model="emailDto.remark"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="addEmail('emailForm')" :disabled="lazyBtn_f">确定</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </div>
+
+<!--    个人中心-->
+    <div v-show="self_f" >
+<!--        信息修改-->
+        <div v-show="self_info_f" class="border-left" style="width:30%">
+            <el-form ref="infoForm" :model="userForm"   label-width="100px"  class="demo-ruleForm">
+                <el-form-item label="用户姓名">
+                    <el-input v-model="userForm.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="用户账号">
+                    <el-input v-model="userForm.username" :readonly="true"></el-input>
+                </el-form-item>
+                <el-form-item label="用户邮箱">
+                    <el-input v-model="userForm.email" ></el-input>
+                </el-form-item>
+                <el-form-item label="拥有角色">
+                    <el-input v-model="userForm.roleNameStr" :readonly="true"></el-input>
+                </el-form-item>
+                <el-form-item label="用户手机">
+                    <el-input v-model="userForm.phone"></el-input>
+                </el-form-item>
+                <el-form-item label="用户性别">
+                    <el-select v-model="userForm.gender" clearable placeholder="请选择">
+                        <el-option
+                                v-for="item in genderList"
+                                :key="item.type"
+                                :label="item.name"
+                                :value="item.type">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="创建时间">
+                    <el-input v-model="userForm.createDate" :readonly="true"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="saveUser" :disabled="lazyBtn_f">保存</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+<!--        密码修改-->
+        <div v-show="self_pwd_f" class="border-left" style="width:30%">
+            <el-form ref="pwdForm" :model="userForm"  label-width="100px" :rules="userRules" class="demo-ruleForm">
+            <el-form-item label="密码类型" prop="type">
+                <el-select v-model="userForm.type" placeholder="请选择密码类型">
+                    <el-option
+                            v-for="item in pwdList"
+                            :key="item.type"
+                            :label="item.name"
+                            :value="item.type">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="邮箱" prop="email">
+                <el-input  v-model="userForm.email" :readonly="true" placeholder="请先到修改信息设置邮箱"></el-input>
+                <el-button type="primary" @click="sendEmailCode" :disabled="sendCodeBtn_f">{{sendCodeTxt}}</el-button>
+            </el-form-item>
+
+            <el-form-item label="输入验证码" prop="code">
+                <el-input  v-model="userForm.code"  ></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" prop="newPwd">
+                <el-input  v-model="userForm.newPwd" type="password" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="确认密码" prop="password2">
+                <el-input  v-model="userForm.password2" type="password" ></el-input>
+            </el-form-item>
+            <el-form-item >
+                <el-button type="primary" @click="changePwd('pwdForm')" :disabled="lazyBtn_f">确定</el-button>
+            </el-form-item>
+            </el-form>
+        </div>
+
+    </div>
 </div>
 
 </body>

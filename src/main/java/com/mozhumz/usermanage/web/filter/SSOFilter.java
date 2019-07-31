@@ -18,6 +18,7 @@ import java.io.IOException;
 /**
  * @author huyuanjia
  * @date 2019/5/8 10:51
+ * 登录拦截
  */
 @Component
 public class SSOFilter implements Filter {
@@ -40,6 +41,13 @@ public class SSOFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request= (HttpServletRequest) servletRequest;
         HttpServletResponse response= (HttpServletResponse) servletResponse;
+        //远程接口放行
+        for(String url:CommonConstant.remoteUrls){
+            if(request.getRequestURL().toString().contains(url)){
+                filterChain.doFilter(request,response);
+                return;
+            }
+        }
         //判断是否有局部会话
         HttpSession session=request.getSession();
         String token= (String) session.getAttribute(CommonConstant.token);

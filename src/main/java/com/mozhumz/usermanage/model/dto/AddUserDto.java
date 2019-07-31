@@ -11,6 +11,9 @@ public class AddUserDto {
     private String username;
     private List<Long> roleIds;
     private String roleIdStr;
+    private Integer gender;
+    private String realName;
+    private String phone;
 
     public void setRoleIds(List<Long> roleIds) {
         if(!CollectionUtils.isEmpty(roleIds)){

@@ -26,5 +26,5 @@ eureka:
 
 urlPre:
   web: http://127.0.0.1:8080/usermanage/index.html
-  sso: http://127.0.0.1:8080/zuul/api/login/checkLogin
+  sso: http://127.0.0.1:8080/hstn/api/login/checkLogin
   webOut: http://127.0.0.1:8080/balance/api/login/logOut

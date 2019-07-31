@@ -1,9 +1,9 @@
 package com.mozhumz.usermanage.service;
 
+import com.hyj.util.web.JsonResponse;
 import com.mozhumz.usermanage.model.entity.App;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mozhumz.usermanage.model.qo.AppQo;
-import top.lshaci.framework.web.model.JsonResponse;
 
 /**
  * <p>
@@ -14,5 +14,5 @@ import top.lshaci.framework.web.model.JsonResponse;
  * @since 2019-05-28
  */
 public interface IAppService extends IService<App> {
-    JsonResponse getAppList(AppQo appQo);
+    JsonResponse  getAppList(AppQo appQo);
 }

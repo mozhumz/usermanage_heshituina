@@ -1,12 +1,12 @@
 package com.mozhumz.usermanage.web.controller;
 
+import com.hyj.util.web.JsonResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import top.lshaci.framework.web.model.JsonResponse;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +28,10 @@ public class TestController {
 
     @ApiOperation(value = "测试")
     @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public JsonResponse test() {
+    public JsonResponse  test() {
         stringRedisTemplate.opsForValue().set("testKey","val");
         request.getSession().setAttribute("haha","hyj");
-        return JsonResponse.success(null);
+        return JsonResponse .success(null);
 
     }
 

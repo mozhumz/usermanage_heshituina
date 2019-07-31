@@ -41,6 +41,10 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "密码")
     private String password;
 
+    @ApiModelProperty(value = "扣款密码")
+    @TableField("balancePwd")
+    private String balancePwd;
+
     @ApiModelProperty(value = "拥有的角色id 对应t_role 如',1,2,3,'")
     @TableField("roleIdStr")
     private String roleIdStr;
@@ -52,7 +56,7 @@ public class User extends Model<User> {
     private Date updateDate;
 
     @ApiModelProperty(value = "1 正常 2禁用")
-    private Boolean state;
+    private Integer state;
 
     @ApiModelProperty(value = "用户姓名")
     @TableField("realName")
@@ -62,6 +66,14 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "用户手机")
     private String phone;
 
+    private Integer gender;
+
+    @ApiModelProperty(value = "登录密码是否为初始密码：1是 2否")
+    private Integer is0pwd;
+    @ApiModelProperty(value = "操作密码是否为初始密码：1是 2否")
+    private Integer is0bpwd;
+
+    private String email;
 
     @Override
     protected Serializable pkVal() {

@@ -10,6 +10,7 @@ import org.springframework.util.DigestUtils;
 public class MD5Util {
     public static final String DEFAULT_KEY="Mozhumz_Xr_WangWei";
     private static final String PWD_KEY="Mozhumz_555_PWD_KEY";
+    public static final String BALANCE_KEY="Mozhumz_Balance_610_WangWei";
 
 
     /**
@@ -25,7 +26,7 @@ public class MD5Util {
             return DigestUtils.md5DigestAsHex(text.getBytes());
         }
         //加密后的字符串
-        return DigestUtils.md5DigestAsHex((text + key).getBytes()).toString();
+        return DigestUtils.md5DigestAsHex((text + key).getBytes());
     }
 
     /**
@@ -42,7 +43,7 @@ public class MD5Util {
     }
 
     /**
-     * 默认密码 123456
+     * 默认登录/操作密码 123456
      * @return
      */
     public static String getDefaultPwd(){
@@ -56,9 +57,37 @@ public class MD5Util {
      * @return
      */
     public static String getPwd(String pwd){
-        return md5(md5(pwd,DEFAULT_KEY),PWD_KEY);
+        return md5(pwd,PWD_KEY);
     }
 
+    /**
+     * 客户支付默认密码 123456
+     * @return
+     */
+    public static String getDefaultBalancePwd(){
+        return md5(md5("123456",DEFAULT_KEY),BALANCE_KEY);
+    }
 
+    /**
+     * 获取客户支付密码
+     * @param pwd 前端密码
+     * @return
+     */
+    public static String getBalancePwd(String pwd){
+        return md5(pwd,BALANCE_KEY);
+    }
+
+    /**
+     * 客户支付密码校验
+     * @param pwd1
+     * @param sqlPwd
+     * @return
+     */
+    public static boolean checkBalancePwd(String pwd1,String sqlPwd){
+        if(!CheckParamsUtil.check(pwd1,sqlPwd)){
+            return false;
+        }
+        return (md5(pwd1,BALANCE_KEY).equals(sqlPwd));
+    }
 
 }

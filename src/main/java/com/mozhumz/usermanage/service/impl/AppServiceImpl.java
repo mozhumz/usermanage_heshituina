@@ -1,5 +1,6 @@
 package com.mozhumz.usermanage.service.impl;
 
+import com.hyj.util.web.JsonResponse;
 import com.mozhumz.usermanage.model.entity.App;
 import com.mozhumz.usermanage.mapper.IAppMapper;
 import com.mozhumz.usermanage.model.qo.AppQo;
@@ -7,7 +8,6 @@ import com.mozhumz.usermanage.service.IAppService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mozhumz.usermanage.utils.SessionUtil;
 import org.springframework.stereotype.Service;
-import top.lshaci.framework.web.model.JsonResponse;
 
 import javax.annotation.Resource;
 
@@ -24,9 +24,8 @@ public class AppServiceImpl extends ServiceImpl<IAppMapper, App> implements IApp
     @Resource
     private IAppMapper appMapper;
 
-    @Override
-    public JsonResponse getAppList(AppQo appQo) {
-        appQo.setRoleId(SessionUtil.getLoginUser().getRole().getId());
-        return JsonResponse.success(appMapper.findAppList(appQo));
+    public JsonResponse  getAppList(AppQo appQo) {
+//        appQo.setRoleId(SessionUtil.getLoginUser().getRole().getId());
+        return JsonResponse .success(appMapper.findAppList(appQo));
     }
 }

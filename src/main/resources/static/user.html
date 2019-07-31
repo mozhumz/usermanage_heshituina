@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理-用户信息</title>
+    <link rel="stylesheet" href="static/css/element-ui.css">
+    <link rel="stylesheet" href="static/css/bootstrap-select.css">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <script src="static/js/common/vue.js"></script>
+    <script src="static/js/common/jquery-3.4.1.min.js"></script>
+    <script src="static/js/common/md5.js"></script>
+    <script src="static/js/common/api.js"></script>
+    <script src="static/js/common/element-ui.js"></script>
+    <script src="static/js/common/user.js"></script>
+    <script src="static/js/common/util.js"></script>
+    <script src="static/js/common/bootstrap-select.js"></script>
+    <script src="static/js/common/bootstrap.min.js"></script>
+    <script src="static/js/userHtml.js"></script>
+</head>
+<style>
+    .el-row {
+    width:85%;
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .border-left{
+    margin-left:6%;
+  }
+
+
+</style>
+<body>
+
+<div id="main">
+    <el-row :gutter="24">
+        <!--<el-col :span="12"><div class="grid-content bg-purple" ></div></el-col>-->
+        <!--<el-col :span="16"><div class="grid-content bg-purple"></div></el-col>-->
+        <el-col :span="24">
+            <div class="grid-content bg-purple" style="text-align:right">
+                <i class="el-icon-user-solid" id="welcomeUser"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+
+                <el-button type="primary" @click="logOut" icon="el-icon-circle-close">退出</el-button>
+            </div>
+        </el-col>
+    </el-row>
+
+    <!--    用户基本信息-->
+    <el-row :gutter="24"   style="width:50%;margin:0 auto;    color: #12a1e9;
+    font-weight: bold;font-size:20px;">
+        <el-col id="baseInfo">{{userBaseInfo}}</el-col>
+    </el-row>
+            <!--<h5 style="text-align:center">导航栏</h5>-->
+    <el-row  class="border-left">
+        <el-col :span="4"></el-col>
+        <el-menu
+                class="el-menu-demo" mode="horizontal"
+                :default-active="menuActive"
+        >
+            <el-menu-item index="1"  @click="changeMenu(1)">
+                <!--<i class="el-icon-menu"></i>-->
+                <span slot="title">用户详情</span>
+            </el-menu-item>
+
+            <el-menu-item index="2" @click="changeMenu(2)">
+                <!--<i class="el-icon-menu"></i>-->
+                <span slot="title">重置密码</span>
+            </el-menu-item>
+        </el-menu>
+    </el-row>
+
+
+    <div v-show="userDetail_f" class="border-left" style="width:30%">
+        <el-form ref="form" :model="userForm" label-width="80px">
+            <el-form-item label="用户姓名">
+                <el-input v-model="userForm.realName"></el-input>
+            </el-form-item>
+            <el-form-item label="用户账号">
+                <el-input v-model="userForm.username"></el-input>
+            </el-form-item>
+            <el-form-item label="拥有角色">
+                <select id="select01"  title="请选择角色" data-actions-box="true" class="selectpicker bla bla bli" multiple >
+
+                </select>
+            </el-form-item>
+            <el-form-item label="用户手机">
+                <el-input v-model="userForm.phone"></el-input>
+            </el-form-item>
+            <el-form-item label="用户性别">
+                <el-select v-model="userForm.gender" clearable placeholder="请选择">
+                    <el-option
+                            v-for="item in genderList"
+                            :key="item.type"
+                            :label="item.name"
+                            :value="item.type">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="创建时间">
+                <el-input v-model="userForm.createDate" disabled></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="saveUser">保存</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+
+    <div v-show="pwd_f" class="border-left">
+        <el-row>
+            <el-button type="text" @click="openMsgBox(1)">重置登录密码</el-button>
+        </el-row>
+        <el-row>
+            <el-button type="text" @click="openMsgBox(2)">重置操作密码</el-button>
+        </el-row>
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -17,6 +17,19 @@ public class CommonConstant {
      */
     public static  final String sessionUser="sessionUser";
 
+    /**
+     * 客户验证码前缀
+     */
+    public static final String customerCode="customerCode";
+
+    public static final String userCode="userCode";
+
+    public static final long customerCodeSeconds=60*5;
+
+    public static final String[]remoteUrls={"/api/sys/sendEmailCode","/api/user/changePwd"};
+
+    public static final String emailCodeTitle="何氏推拿-验证码";
+
 
 
 

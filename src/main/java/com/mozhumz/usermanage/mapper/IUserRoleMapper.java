@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-04-29
  */
 public interface IUserRoleMapper extends BaseMapper<UserRole> {
+    int addOne(UserRole userRole);
 
 }
