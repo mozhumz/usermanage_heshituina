@@ -1,13 +1,9 @@
 # spring
 spring:
-  rabbitmq:
-    addresses: 127.0.0.1
-    username: guest
-    password: guest
-    port: 5762
+
   # profiles
   profiles:
-    active: dev
+    active: prod
   # swagger
   swagger:
     enabled: true

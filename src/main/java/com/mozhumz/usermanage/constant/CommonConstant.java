@@ -6,6 +6,7 @@ package com.mozhumz.usermanage.constant;
  */
 public class CommonConstant {
     public static  final String token="token";
+    public static  final String usermanageToken="usermanage-Token";
 
     /**
      * 全局会话 根据token存储在redis

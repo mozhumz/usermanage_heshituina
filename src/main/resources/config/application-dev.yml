@@ -15,6 +15,11 @@ spring:
       url: jdbc:mysql://localhost:3306/heshituina_usermanage_pidu?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
       username: root
       password: 123456
+  rabbitmq:
+    addresses: 127.0.0.1
+    username: guest
+    password: guest
+    port: 5762
 
 server:
   port: 8081
@@ -27,4 +32,7 @@ eureka:
 urlPre:
   web: http://127.0.0.1:8080/usermanage/index.html
   sso: http://127.0.0.1:8080/hstn/api/login/checkLogin
-  webOut: http://127.0.0.1:8080/balance/api/login/logOut
+  webOut: http://127.0.0.1:8080/usermanage/api/user/logOut
+#  web: http://mozhu.iok.la/usermanage/index.html
+#  sso: http://mozhu.iok.la/hstn/api/login/checkLogin
+#  webOut: http://mozhu.iok.la/balance/api/login/logOut
