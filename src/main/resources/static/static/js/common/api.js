@@ -1,5 +1,9 @@
 var pre='http://127.0.0.1:8080/usermanage';
 var zuulPre='http://127.0.0.1:8080/hstn';
+
+//var pre='http://ec2-13-230-243-231.ap-northeast-1.compute.amazonaws.com/usermanage';
+//var zuulPre='http://ec2-13-230-243-231.ap-northeast-1.compute.amazonaws.com/hstn';
+
 var logOutUrl=zuulPre+'/api/login/logOut';
 var loginHtml=zuulPre+'/index.html';
 var ok='操作成功';

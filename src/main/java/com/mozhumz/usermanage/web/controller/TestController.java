@@ -1,6 +1,8 @@
 package com.mozhumz.usermanage.web.controller;
 
 import com.hyj.util.web.JsonResponse;
+import com.mozhumz.usermanage.service.ITestService;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,6 +25,8 @@ public class TestController {
     private HttpServletRequest request;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private ITestService testService;
 
 
 
@@ -32,6 +36,14 @@ public class TestController {
         stringRedisTemplate.opsForValue().set("testKey","val");
         request.getSession().setAttribute("haha","hyj");
         return JsonResponse .success(null);
+
+    }
+
+    @ApiOperation(value = "测试添加")
+    @RequestMapping(value = "/addManageTest", method = RequestMethod.GET)
+    @GlobalTransactional
+    public JsonResponse  addManageTest() {
+        return testService.add();
 
     }
 

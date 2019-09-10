@@ -1,6 +1,7 @@
 package com.mozhumz.usermanage.web.filter;
 
 import com.hyj.util.param.CheckParamsUtil;
+import com.hyj.util.str.StrUtil;
 import com.mozhumz.usermanage.constant.CommonConstant;
 import com.mozhumz.usermanage.feign.ZuulResult;
 import com.mozhumz.usermanage.feign.entity.dto.CheckTokenDto;
@@ -63,7 +64,7 @@ public class SSOFilter implements Filter {
             CheckTokenDto checkTokenDto=new CheckTokenDto();
             checkTokenDto.setToken(tokenStr);
             checkTokenDto.setOutUrl(webOut);
-            checkTokenDto.setSessionId(request.getSession().getId());
+            checkTokenDto.setSessionId(getSessionCode(request.getHeader("Cookie")));
             if(zuulResult.checkToken(checkTokenDto)){
                 //设置session
                 request.getSession().setAttribute(CommonConstant.usermanageToken,tokenStr);
@@ -74,5 +75,19 @@ public class SSOFilter implements Filter {
         //重定向到认证中心
         response.sendRedirect(ssoUrl+"?webUrl="+webUrl);
 
+    }
+
+    public static String getSessionCode(String cookie){
+        if(CheckParamsUtil.check(cookie)){
+            String []arr1=cookie.split(";");
+            for(String s:arr1){
+                if(CheckParamsUtil.check(s)){
+                    s= StrUtil.trim(s);
+                    if(s.startsWith("SESSION="))
+                        return s;
+                }
+            }
+        }
+        return null;
     }
 }

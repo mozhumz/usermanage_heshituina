@@ -27,7 +27,7 @@ public class CommonConstant {
 
     public static final long customerCodeSeconds=60*5;
 
-    public static final String[]remoteUrls={"/api/sys/sendEmailCode","/api/user/changePwd"};
+    public static final String[]remoteUrls={"/api/sys/sendEmailCode","/api/user/changePwd","/api/test/addManageTest"};
 
     public static final String emailCodeTitle="何氏推拿-验证码";
 

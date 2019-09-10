@@ -11,15 +11,60 @@ spring:
   # datasource
   datasource:
     # druid
-    druid:
+#    druid:
       url: jdbc:mysql://localhost:3306/heshituina_usermanage_pidu?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
       username: root
       password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
   rabbitmq:
     addresses: 127.0.0.1
     username: guest
     password: guest
     port: 5762
+#  cloud:
+#    stream:
+#      bindings:
+##        输出通道
+#        sourceA:
+#          destination: test_spring_stream
+#          producer:
+#            partitionCount: 1
+#        #输入通道
+#        testa:
+#          binder:
+#          destination: test_spring_stream
+#          group: group-1
+#          consumer:
+#            concurrency: 1
+#            partitioned: false
+#      kafka:
+#        binder:
+#          brokers: 127.0.0.1:9092
+#          zk-nodes: 127.0.0.1:2181
+#          min-partition-count: 1
+#          auto-create-topics: true
+#          auto-add-partitions: true
+
+
+
+
+
+
+#  activemq:
+##    默认自动生成
+##    broker-url: tcp://192.168.5.10:61616
+#    user: admin
+#    password: admin
+#    broker-url: tcp://127.0.0.1:61616
+#    pool:
+#      enabled: true
+#      max-connections: 10
+#  jms:
+##    为true时是topic模式，为false是queue模式
+#    pub-sub-domain: true
+
+#queueName: publish.queue
+#topicName: publish.topic
 
 server:
   port: 8081

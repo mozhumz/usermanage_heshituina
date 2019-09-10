@@ -3,7 +3,7 @@ spring:
 
   # profiles
   profiles:
-    active: prod
+    active: dev
   # swagger
   swagger:
     enabled: true
@@ -16,8 +16,8 @@ logging:
     usermanage-heshituina.usermanage: info
 # mybatis plus
 mybatis-plus:
-  type-aliases-package: com.mozhumz.usermanage.model.entity,com.mozhumz.usermanage.model.*
-  mapper-locations: classpath:mappers/*Mapper.xml
+  type-aliases-package: com.mozhumz.usermanage.model.entity
+  mapper-locations: classpath:mappers/*.xml
 
 #hystrix的超时时间
 hystrix:
