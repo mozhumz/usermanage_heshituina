@@ -20,7 +20,6 @@ public class TestServiceImpl implements ITestService {
 
 
     @Override
-    @GlobalTransactional
     public JsonResponse add() {
         System.out.println("com.mozhumz.usermanage.service.impl.TestServiceImpl.add-xid:"+RootContext.getXID());
         ManageTest manageTest=new ManageTest();
